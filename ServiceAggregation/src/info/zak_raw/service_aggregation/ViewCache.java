@@ -11,19 +11,18 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Text;
 
-class Resource {
+class ViewCache {
 	
 	//------------- Constants ----------------------------------
-	private static final String KIND = "info.zak_raw.service_aggregation.resources";
+	private static final String KIND = "info.zak_raw.service_aggregation.view_cache";
 	
 	private static final String CONTENT = "content";
-	private static final String LAST_MODIFIED = "last_modified";
 	
 	//------------- Fields -------------------------------------
 	private Entity entity;
 	
 	//------------- Constructors -------------------------------
-	public Resource( String name ) {
+	public ViewCache( String name ) {
 		
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Key key = KeyFactory.createKey( KIND, name );
@@ -49,9 +48,9 @@ class Resource {
 		}
 	}
 	
-	public void updateContent( String value ) {
+	public void updateContent( CharSequence value ) {
 		
-		this.update( CONTENT, new Text( value ) );
+		this.update( CONTENT, new Text( value.toString() ) );
 	}
 	
 	private void update( String name, Object value ) {

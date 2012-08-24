@@ -9,7 +9,7 @@
 		</init-param>
 		<init-param>
 			<param-name>t2.exclude-resources</param-name>
-			<param-value>.css,.js</param-value>
+			<param-value>.jsp,.css,.js</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
