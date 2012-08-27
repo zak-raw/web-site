@@ -47,8 +47,9 @@ class TwitterViewBuilder {
 	}
 	
 	private void build( Status status ) {
-		// TODO
+		
 		this.buildCreatedAt( status.getCreatedAt() );
+		this.buildText( status );
 	}
 	
 	private void buildCreatedAt( Date date ) {
@@ -59,7 +60,37 @@ class TwitterViewBuilder {
 	
 	private void buildText( Status status ) {
 		
+		this.builder.startTagWithClass( "p", "text" );
 		
+		EntityReplacements replacements = new EntityReplacements( status );
+		String text = status.getText();
+		if ( replacements.isEmpty() ) {
+			this.builder.putText( text );
+		}
+		else {
+			this.buildText( text, replacements );
+		}
+		
+		this.builder.endTag( "p" );
+	}
+	
+	private void buildText( CharSequence text, EntityReplacements replacements ) {
+		
+		StringBuilder textBuilder = new StringBuilder();
+		int index = 0;
+		while ( index < text.length() ) {
+			EntityReplacement replacement = replacements.find( index );
+			if ( replacement == null ) {
+				textBuilder.append( text.charAt( index ) );
+				index++;
+			}
+			else {
+				textBuilder.append( replacement.text );
+				index = replacement.end;
+			}
+		}
+		
+		this.builder.putText( textBuilder );
 	}
 
 }
