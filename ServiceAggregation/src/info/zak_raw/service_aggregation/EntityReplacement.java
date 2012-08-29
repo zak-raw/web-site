@@ -13,7 +13,7 @@ import twitter4j.UserMentionEntity;
  * @author Junta Yoshizaki
  *
  */
-class EntityReplacement {
+class EntityReplacement implements Comparable<EntityReplacement> {
 
 	//------------- Fields -------------------------------------
 	public final int start;
@@ -60,6 +60,15 @@ class EntityReplacement {
 	public boolean contains( int index ) {
 		
 		return this.start <= index && index < this.end;
+	}
+
+	@Override
+	public int compareTo( EntityReplacement another ) {
+		
+		if ( this.start < another.start ) return 1;
+		if ( another.start < this.start ) return -1;
+		
+		return 0;
 	}
 	
 }

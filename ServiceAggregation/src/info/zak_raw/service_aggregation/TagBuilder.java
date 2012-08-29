@@ -25,6 +25,11 @@ class TagBuilder {
 		return this.builder.toString();
 	}
 	
+	public void clear() {
+		
+		this.builder.setLength( 0 );
+	}
+	
 	public TagBuilder putText( Object value ) {
 		
 		String text = ( value == null ) ? "" : value.toString();
@@ -89,7 +94,7 @@ class TagBuilder {
 	
 	public TagBuilder putAnchor( String href, Object value ) {
 		
-		return this.putTag( "a", value, new Attribute( "htef", href ) );
+		return this.putTag( "a", value, new Attribute( "href", href ) );
 	}
 
 }

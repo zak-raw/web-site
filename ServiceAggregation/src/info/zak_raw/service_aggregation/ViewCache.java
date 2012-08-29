@@ -11,7 +11,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Text;
 
-class ViewCache {
+public class ViewCache {
 	
 	//------------- Constants ----------------------------------
 	private static final String KIND = "info.zak_raw.service_aggregation.view_cache";

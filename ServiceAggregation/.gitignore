@@ -10,3 +10,5 @@ war/WEB-INF/lib/geronimo-jpa*.jar
 war/WEB-INF/lib/jdo-api*.jar
 war/WEB-INF/lib/jsr*.jar
 war/WEB-INF/lib/transaction-api*.jar
+
+src/twitter4j.properties

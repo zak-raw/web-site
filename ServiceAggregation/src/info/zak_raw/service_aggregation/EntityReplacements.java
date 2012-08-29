@@ -6,6 +6,8 @@ package info.zak_raw.service_aggregation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 import twitter4j.HashtagEntity;
 import twitter4j.Status;
@@ -16,10 +18,10 @@ import twitter4j.UserMentionEntity;
  * @author Junta Yoshizaki
  *
  */
-class EntityReplacements {
+class EntityReplacements implements Iterable<EntityReplacement> {
 	
 	//------------- Fields -------------------------------------
-	private final Collection<EntityReplacement> replacements;
+	private final List<EntityReplacement> replacements;
 	
 	//------------- Constructors -------------------------------
 	public EntityReplacements( Status status ) {
@@ -28,6 +30,7 @@ class EntityReplacements {
 		this.replacements.addAll( createUrlReplacements( status ) );
 		this.replacements.addAll( createMentionReplacements( status ) );
 		this.replacements.addAll( createHashtagReplacements( status ) );
+		Collections.sort( this.replacements );
 	}
 	
 	private static Collection<EntityReplacement> createUrlReplacements( Status status ) {
@@ -76,6 +79,12 @@ class EntityReplacements {
 	}
 	
 	//------------- Methods ------------------------------------
+	@Override
+	public Iterator<EntityReplacement> iterator() {
+		
+		return this.replacements.iterator();
+	}
+	
 	public EntityReplacement find( int charIndex ) {
 		
 		for ( EntityReplacement replacement : this.replacements ) {
