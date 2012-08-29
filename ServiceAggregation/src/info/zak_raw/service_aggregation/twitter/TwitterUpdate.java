@@ -1,7 +1,10 @@
 /**
  * 
  */
-package info.zak_raw.service_aggregation;
+package info.zak_raw.service_aggregation.twitter;
+
+import info.zak_raw.service_aggregation.TagBuilder;
+import info.zak_raw.service_aggregation.ViewCache;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -79,14 +82,21 @@ public class TwitterUpdate {
 	
 	private void build( Status status ) {
 		
-		this.buildCreatedAt( status.getCreatedAt() );
+		this.buildCreatedAt( status );
 		this.buildText( status );
 	}
 	
-	private void buildCreatedAt( Date date ) {
+	private void buildCreatedAt( Status status ) {
 		
+		Date date = status.getCreatedAt();
+		String screenName = status.getUser().getScreenName();
+		
+		String url = "https://twitter.com/" + screenName + "/statuses/" + status.getId();
 		String value = this.createdAtFormat.format( date );
-		this.builder.putTagWithClass( "p", "created-at", value );
+		
+		this.builder.startTagWithClass( "p", "date" );
+		this.builder.putAnchor( url, value );
+		this.builder.endTag( "p" );
 	}
 	
 	private void buildText( Status status ) {

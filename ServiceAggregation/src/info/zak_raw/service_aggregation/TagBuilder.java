@@ -7,7 +7,7 @@ package info.zak_raw.service_aggregation;
  * @author Junta Yoshizaki
  *
  */
-class TagBuilder {
+public class TagBuilder {
 
 	//------------- Fields -------------------------------------
 	private StringBuilder builder;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package info.zak_raw.service_aggregation;
+package info.zak_raw.service_aggregation.twitter;
 
 import java.util.ArrayList;
 import java.util.Collection;

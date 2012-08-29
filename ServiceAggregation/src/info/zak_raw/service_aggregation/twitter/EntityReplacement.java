@@ -1,8 +1,9 @@
 /**
  * 
  */
-package info.zak_raw.service_aggregation;
+package info.zak_raw.service_aggregation.twitter;
 
+import info.zak_raw.service_aggregation.TagBuilder;
 import twitter4j.HashtagEntity;
 import twitter4j.URLEntity;
 import twitter4j.UserMentionEntity;
@@ -65,8 +66,8 @@ class EntityReplacement implements Comparable<EntityReplacement> {
 	@Override
 	public int compareTo( EntityReplacement another ) {
 		
-		if ( this.start < another.start ) return 1;
-		if ( another.start < this.start ) return -1;
+		if ( this.start < another.start ) return -1;
+		if ( another.start < this.start ) return 1;
 		
 		return 0;
 	}
