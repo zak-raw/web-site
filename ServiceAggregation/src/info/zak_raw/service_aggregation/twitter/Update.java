@@ -29,14 +29,14 @@ import twitter4j.TwitterFactory;
  *
  */
 @Page( "/update/twitter" )
-public class TwitterUpdate {
+public class Update {
 
 	//------------- Fields -------------------------------------
 	private final TagBuilder builder;
 	private DateFormat createdAtFormat;
 	
 	//------------- Constructors -------------------------------
-	public TwitterUpdate() {
+	public Update() {
 		
 		this.builder = new TagBuilder( 200 * 20 ); // 1ツイートあたり平均200文字くらい？
 		this.createdAtFormat = new SimpleDateFormat( "yyyy-MM-dd E HH:mm:ss" );

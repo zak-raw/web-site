@@ -3,6 +3,11 @@
 	<cron>
 		<url>/update/twitter</url>
 		<description>Update Twitter HTML Fragment</description>
-		<schedule>every 10 minutes</schedule>
+		<schedule>every 20 minutes</schedule>
+	</cron>
+	<cron>
+		<url>/update/tumblr</url>
+		<description>Update Tumblr HTML Fragment</description>
+		<schedule>every 59 minutes</schedule>
 	</cron>
 </cronentries>

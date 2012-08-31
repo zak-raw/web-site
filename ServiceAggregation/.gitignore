@@ -12,3 +12,4 @@ war/WEB-INF/lib/jsr*.jar
 war/WEB-INF/lib/transaction-api*.jar
 
 src/twitter4j.properties
+src/tumblr.properties

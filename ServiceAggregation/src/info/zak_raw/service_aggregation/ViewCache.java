@@ -15,8 +15,8 @@ public class ViewCache {
 	
 	//------------- Constants ----------------------------------
 	private static final String KIND = "info.zak_raw.service_aggregation.view_cache";
-	
 	private static final String CONTENT = "content";
+	private static final String LAST_MODIFIED = "last_modified";
 	
 	//------------- Fields -------------------------------------
 	private Entity entity;
@@ -48,9 +48,26 @@ public class ViewCache {
 		}
 	}
 	
+	public long getLastModified() {
+		
+		Object value = this.entity.getProperty( LAST_MODIFIED );
+		if ( value instanceof Number ) {
+			Number number = (Number) value;
+			return number.longValue();
+		}
+		else {
+			return 0;
+		}
+	}
+	
 	public void updateContent( CharSequence value ) {
 		
 		this.update( CONTENT, new Text( value.toString() ) );
+	}
+	
+	public void updateLastModified( long time ) {
+		
+		this.update( LAST_MODIFIED, time );
 	}
 	
 	private void update( String name, Object value ) {

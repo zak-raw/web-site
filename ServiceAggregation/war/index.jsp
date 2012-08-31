@@ -10,5 +10,6 @@
 		<h1>zak-raw.info</h1>
 		<p>under construction</p>
 		<%= new ViewCache( "twitter" ).getContent() %>
+		<%= new ViewCache( "tumblr" ).getContent() %>
 	</body>
 </html>

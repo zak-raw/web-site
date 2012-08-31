@@ -96,5 +96,11 @@ public class TagBuilder {
 		
 		return this.putTag( "a", value, new Attribute( "href", href ) );
 	}
+	
+	public TagBuilder putImg( String src, String alt ) {
+		
+		return this.putTag(
+				"img", "", new Attribute( "src", src ), new Attribute( "alt", alt ) );
+	}
 
 }
