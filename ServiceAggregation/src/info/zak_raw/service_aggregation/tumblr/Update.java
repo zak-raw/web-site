@@ -83,7 +83,7 @@ public class Update {
 		
 		if ( status != 200 ) return "";
 		
-		PostsResponse response = new PostsResponse( json.getJSONObject( "status" ) );
+		PostsResponse response = new PostsResponse( json.getJSONObject( "response" ) );
 		
 		return this.build( response );
 	}
