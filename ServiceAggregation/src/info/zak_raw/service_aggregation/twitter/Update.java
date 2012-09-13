@@ -3,12 +3,16 @@
  */
 package info.zak_raw.service_aggregation.twitter;
 
-import info.zak_raw.service_aggregation.TagBuilder;
 import info.zak_raw.service_aggregation.ViewCache;
+import info.zak_raw.service_aggregation.util.markup.Element;
+import info.zak_raw.service_aggregation.util.markup.Tag;
+import info.zak_raw.service_aggregation.util.markup.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import org.t2framework.t2.annotation.core.Default;
@@ -32,13 +36,11 @@ import twitter4j.TwitterFactory;
 public class Update {
 
 	//------------- Fields -------------------------------------
-	private final TagBuilder builder;
 	private DateFormat createdAtFormat;
 	
 	//------------- Constructors -------------------------------
 	public Update() {
 		
-		this.builder = new TagBuilder( 200 * 20 ); // 1ツイートあたり平均200文字くらい？
 		this.createdAtFormat = new SimpleDateFormat( "yyyy-MM-dd E HH:mm:ss" );
 		this.createdAtFormat.setTimeZone( TimeZone.getTimeZone( "Asia/Tokyo" ) );
 	}
@@ -63,73 +65,54 @@ public class Update {
 	
 	private CharSequence createHtmlFrament() throws TwitterException {
 		
-		this.builder.clear();
-		
 		Twitter twitter = new TwitterFactory().getInstance();
 		ResponseList<Status> timeline = twitter.getUserTimeline( "zak_raw" );
 		
-		this.builder.startTag( "ul" );
+		Tag ul = new Tag( "ul" );
 		for ( Status status : timeline ) {
-			this.builder.startTag( "li" );
-			this.build( status );
-			this.builder.endTag( "li" );
+			Tag li = new Tag( "li" );
+			li.add( this.createElements( status ) );
+			ul.add( li );
 		}
 		
-		this.builder.endTag( "ul" );
+		StringBuilder builder = new StringBuilder( 300 * 20 );
+		ul.put( builder );
 		
-		return this.builder.toString();
+		return builder;
 	}
 	
-	private void build( Status status ) {
+	private List<Element> createElements( Status status ) {
 		
-		this.buildCreatedAt( status );
-		this.buildText( status );
+		List<Element> elements = new ArrayList<Element>( 2 );
+		elements.add( this.createDate( status ) );
+		elements.add( this.createText( status ) );
+		
+		return elements;
 	}
 	
-	private void buildCreatedAt( Status status ) {
+	private Element createDate( Status status ) {
 		
 		Date date = status.getCreatedAt();
 		String screenName = status.getUser().getScreenName();
 		
 		String url = "https://twitter.com/" + screenName + "/statuses/" + status.getId();
-		String value = this.createdAtFormat.format( date );
+		Element value = new Text( this.createdAtFormat.format( date ) );
 		
-		this.builder.startTagWithClass( "p", "date" );
-		this.builder.putAnchor( url, value );
-		this.builder.endTag( "p" );
+		Tag p = Tag.withClass( "p", "date" );
+		p.add( Tag.anchor( url, value ) );
+		
+		return p;
 	}
 	
-	private void buildText( Status status ) {
-		
-		this.builder.startTagWithClass( "p", "text" );
+	private Element createText( Status status ) {
 		
 		EntityReplacements replacements = new EntityReplacements( status );
 		String text = status.getText();
-		if ( replacements.isEmpty() ) {
-			this.builder.putText( text );
-		}
-		else {
-			this.buildText( text, replacements );
-		}
 		
-		this.builder.endTag( "p" );
-	}
-	
-	private void buildText( CharSequence text, EntityReplacements replacements ) {
+		Tag p = Tag.withClass( "p", "text" );
+		p.add( new Text( replacements.replace( text ) ) );
 		
-		int start = 0;
-		for ( EntityReplacement replacement : replacements ) {
-			if ( start < replacement.start ) {
-				this.builder.putText( text.subSequence( start, replacement.start ) );
-			}
-			
-			this.builder.putText( replacement.text );
-			start = replacement.end;
-		}
-		
-		if ( start < text.length() ) {
-			this.builder.putText( text.subSequence( start, text.length() ) );
-		}
+		return p;
 	}
 
 }

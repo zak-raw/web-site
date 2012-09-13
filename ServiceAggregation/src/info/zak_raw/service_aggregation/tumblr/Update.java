@@ -3,8 +3,8 @@
  */
 package info.zak_raw.service_aggregation.tumblr;
 
-import info.zak_raw.service_aggregation.TagBuilder;
 import info.zak_raw.service_aggregation.ViewCache;
+import info.zak_raw.service_aggregation.util.markup.Tag;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -32,12 +32,12 @@ import com.google.appengine.labs.repackaged.org.json.JSONObject;
 public class Update {
 	
 	//------------- Fields -------------------------------------
-	private TagBuilder builder;
+	private StringBuilder builder;
 	
 	//------------- Constructors -------------------------------
 	public Update() {
 		
-		this.builder = new TagBuilder( 300 * 20 );
+		this.builder = new StringBuilder( 300 * 20 );
 	}
 	
 	//------------- Methods ------------------------------------
@@ -51,7 +51,8 @@ public class Update {
 		try {
 			ViewCache cache = new ViewCache( "tumblr" );
 			
-			String htmlFragment = this.createHtmlFragment( apiKey );
+			PostsResponse posts = loadPosts( apiKey );
+			String htmlFragment = this.createHtmlFragment( posts );
 			if ( ! htmlFragment.isEmpty() ) {
 				cache.updateContent( htmlFragment );
 				
@@ -71,7 +72,7 @@ public class Update {
 		}
 	}
 	
-	private String createHtmlFragment( String apiKey ) throws IOException, JSONException {
+	private static PostsResponse loadPosts( String apiKey ) throws IOException, JSONException {
 		
 		URL url = new URL(
 				"http://api.tumblr.com/v2/blog/zak-raw.tumblr.com/posts?api_key=" + apiKey );
@@ -81,34 +82,30 @@ public class Update {
 		JSONObject json = new JSONObject( body );
 		int status = json.getJSONObject( "meta" ).getInt( "status" );
 		
-		if ( status != 200 ) return "";
-		
-		PostsResponse response = new PostsResponse( json.getJSONObject( "response" ) );
-		
-		return this.build( response );
+		return ( status != 200 ) ?
+				null : new PostsResponse( json.getJSONObject( "response" ) );
 	}
 	
-	private String build( PostsResponse response ) throws JSONException {
+	private String createHtmlFragment( PostsResponse response ) throws JSONException {
 		
-		this.builder.startTag( "ul" );
+		if ( response == null ) return "";
 		
+		Tag ul = new Tag( "ul" );
 		for ( Post post : response.getPosts() ) {
-			this.builder.startTag( "li" );
-			post.buildTag( this.builder );
-			this.builder.endTag( "li" );
+			Tag li = new Tag( "li" );
+			li.add( post.createElements() );
+			ul.add( li );
 		}
 		
-		this.builder.endTag( "ul" );
+		this.builder.setLength( 0 );
+		ul.put( this.builder );
 		
-		String text = this.builder.toString();
-		this.builder.clear();
-		
-		return text;
+		return this.builder.toString();
 	}
 	
 	private static String fetchBody( URLConnection connection ) throws IOException {
 		
-		// TODO getContentLength() が -1 返すうんこ
+		// getContentLength() が -1 返す
 		
 		StringWriter writer = new StringWriter( 26000 );
 		Reader reader = null;

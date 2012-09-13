@@ -3,11 +3,14 @@
  */
 package info.zak_raw.service_aggregation.tumblr;
 
+import info.zak_raw.service_aggregation.util.markup.Element;
+import info.zak_raw.service_aggregation.util.markup.Tag;
+import info.zak_raw.service_aggregation.util.markup.Text;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import info.zak_raw.service_aggregation.TagBuilder;
 
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
@@ -30,40 +33,50 @@ class PhotoPost extends Post {
 
 	//------------- Methods ------------------------------------
 	@Override
-	public void buildTag( TagBuilder builder ) throws JSONException {
-		// TODO Auto-generated method stub
+	public Collection<Element> createElements() throws JSONException {
 		
+		Collection<Element> elements = new ArrayList<Element>( this.getPhotos().size() * 3 );
 		for ( Photo photo : this.getPhotos() ) {
-			this.buildDate( builder );
-			this.buildImage( photo, builder );
+			elements.add( this.createDate() );
+			elements.add( this.createImage( photo ) );
+			elements.add( this.createCaption() );
 		}
+		
+		return elements;
 	}
 	
-	private void buildDate( TagBuilder builder ) throws JSONException {
-		 
-		builder.startTagWithClass( "p", "date" );
-		builder.putAnchor( this.getPostUrl(), this.getDate() );
-		builder.endTag( "p" );
+	private Element createDate() throws JSONException {
+		
+		String href = this.getPostUrl();
+		Text text = new Text( this.getDate() );
+		
+		Tag p = Tag.withClass( "p", "date" );
+		p.add( Tag.anchor( href, text ) );
+		
+		return p;
 	}
 	
-	private void buildImage( Photo photo, TagBuilder builder ) throws JSONException {
+	private Element createImage( Photo photo ) throws JSONException {
 		
-		PhotoSize size = photo.getAltSizeByWidth( 400 );
+		String href = this.getPostUrl();
+		String src = photo.getAltSizeByWidth( 400 ).getUrl();
+		String alt = this.getSlug();
 		
-		builder.startTagWithClass( "p", "image" );
+		Tag p = Tag.withClass( "p", "image" );
+		p.add( Tag.anchor( href, Tag.img( src, alt ) ) );
 		
-		builder.startAnchor( this.getPostUrl() );
-		builder.putImg( size.getUrl(), this.getSlug() );
-		builder.endTag( "a" );
-		
-		builder.endTag( "p" );
+		return p;
 	}
 	
-	public void buildCaption( TagBuilder builder ) throws JSONException {
+	private Element createCaption() throws JSONException {
 		
-		builder.startTagWithClass( "p", "caption" );
-		builder.putAnchor( this.getSourceUrl(), this.getCaption() );
-		builder.endTag( "p" );
+		String href = this.getSourceUrl();
+		Text caption = new Text( this.getCaption() );
+		
+		Tag p = Tag.withClass( "p", "caption" );
+		p.add( Tag.anchor( href, caption ) );
+		
+		return p;
 	}
 	
 	public String getCaption() throws JSONException {

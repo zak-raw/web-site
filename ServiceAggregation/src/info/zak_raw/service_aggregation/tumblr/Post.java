@@ -3,9 +3,10 @@
  */
 package info.zak_raw.service_aggregation.tumblr;
 
-import info.zak_raw.service_aggregation.TagBuilder;
+import info.zak_raw.service_aggregation.util.markup.Element;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
@@ -16,7 +17,7 @@ import com.google.appengine.labs.repackaged.org.json.JSONObject;
  * @author Junta Yoshizaki
  *
  */
-class Post extends JSONObjectWrapper {
+abstract class Post extends JSONObjectWrapper {
 
 	//------------- Statics ------------------------------------
 	public static Post from( JSONObject object ) throws JSONException {
@@ -26,7 +27,7 @@ class Post extends JSONObjectWrapper {
 		
 		if ( "photo".equals( type ) ) return new PhotoPost( object );
 		
-		return new Post( object );
+		return null;
 	}
 	
 	//------------- Constructors -------------------------------
@@ -36,8 +37,7 @@ class Post extends JSONObjectWrapper {
 	}
 	
 	//------------- Methods ------------------------------------
-	public void buildTag( TagBuilder builder ) throws JSONException {
-	}
+	public abstract Collection<Element> createElements() throws JSONException;
 	
 	/**
 	 * @return The short name used to uniquely identify a blog

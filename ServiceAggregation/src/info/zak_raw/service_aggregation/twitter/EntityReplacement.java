@@ -3,7 +3,9 @@
  */
 package info.zak_raw.service_aggregation.twitter;
 
-import info.zak_raw.service_aggregation.TagBuilder;
+import info.zak_raw.service_aggregation.util.markup.Element;
+import info.zak_raw.service_aggregation.util.markup.Tag;
+import info.zak_raw.service_aggregation.util.markup.Text;
 import twitter4j.HashtagEntity;
 import twitter4j.URLEntity;
 import twitter4j.UserMentionEntity;
@@ -19,18 +21,17 @@ class EntityReplacement implements Comparable<EntityReplacement> {
 	//------------- Fields -------------------------------------
 	public final int start;
 	public final int end;
-	public final String text;
+	public final Element anchor;
 	
 	//------------- Constructors -------------------------------
 	public EntityReplacement( URLEntity entity ) {
 		
 		String expandedUrl = entity.getExpandedURL().toString();
 		String displayUrl = entity.getDisplayURL();
-		String anchor = new TagBuilder( 30 ).putAnchor( expandedUrl, displayUrl ).toString();
 		
 		this.start = entity.getStart();
 		this.end = entity.getEnd();
-		this.text = anchor;
+		this.anchor = Tag.anchor( expandedUrl, new Text( displayUrl ) );
 	}
 	
 	public EntityReplacement( UserMentionEntity entity ) {
@@ -38,11 +39,10 @@ class EntityReplacement implements Comparable<EntityReplacement> {
 		String screenName = entity.getScreenName();
 		String at = "@" + screenName;
 		String url = "https://twitter.com/" + screenName;
-		String anchor = new TagBuilder( 30 ).putAnchor( url, at ).toString();
 		
 		this.start = entity.getStart();
 		this.end = entity.getEnd();
-		this.text = anchor;
+		this.anchor = Tag.anchor( url, new Text( at ) );
 	}
 	
 	public EntityReplacement( HashtagEntity entity ) {
@@ -50,19 +50,13 @@ class EntityReplacement implements Comparable<EntityReplacement> {
 		String text = entity.getText();
 		String tag = '#' + text;
 		String url = "https://twitter.com/search/?q=%23" + text;
-		String anchor = new TagBuilder( 30 ).putAnchor( url, tag ).toString();
 		
 		this.start = entity.getStart();
 		this.end = entity.getEnd();
-		this.text = anchor;
+		this.anchor = Tag.anchor( url, new Text( tag ) );
 	}
 	
 	//------------- Methods ------------------------------------
-	public boolean contains( int index ) {
-		
-		return this.start <= index && index < this.end;
-	}
-
 	@Override
 	public int compareTo( EntityReplacement another ) {
 		

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package info.zak_raw.service_aggregation;
+package info.zak_raw.service_aggregation.util.markup;
 
 /**
  * マークアップタグの属性です．
@@ -9,7 +9,7 @@ package info.zak_raw.service_aggregation;
  * @author Junta Yoshizaki
  *
  */
-class Attribute {
+public class Attribute {
 	
 	//------------- Fields -------------------------------------
 	public final String name;
