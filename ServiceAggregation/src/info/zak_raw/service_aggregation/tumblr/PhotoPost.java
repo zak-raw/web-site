@@ -59,7 +59,7 @@ class PhotoPost extends Post {
 	
 	private Element createImage( Photo photo ) throws JSONException {
 		
-		String href = this.getPostUrl();
+		String href = this.getSourceUrl();
 		String src = photo.getAltSizeByWidth( 400 ).getUrl();
 		String alt = this.getSlug();
 		
