@@ -76,7 +76,7 @@ public class Update {
 		}
 		
 		StringBuilder builder = new StringBuilder( 300 * 20 );
-		ul.put( builder );
+		ul.serialize( builder );
 		
 		return builder;
 	}

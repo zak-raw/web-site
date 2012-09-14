@@ -4,10 +4,10 @@
 package info.zak_raw.service_aggregation.util.markup;
 
 /**
- * @author yoshizaki
+ * @author Junta Yoshizaki
  *
  */
 public interface Element {
 	
-	void put( StringBuilder builder );
+	void serialize( StringBuilder builder );
 }

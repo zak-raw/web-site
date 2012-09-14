@@ -90,7 +90,7 @@ class EntityReplacements {
 				text.append( rawText.subSequence( start, replacement.start ) );
 			}
 			
-			replacement.anchor.put( text );
+			replacement.anchor.serialize( text );
 			start = replacement.end;
 		}
 		

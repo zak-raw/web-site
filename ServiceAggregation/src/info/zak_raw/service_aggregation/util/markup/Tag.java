@@ -19,9 +19,9 @@ public class Tag implements Element {
 		return new Tag( name, new Attribute( "class", className ) );
 	}
 	
-	public static Tag anchor( String src, Element content ) {
+	public static Tag anchor( String href, Element content ) {
 		
-		Tag tag = new Tag( "a", new Attribute( "src", src ) );
+		Tag tag = new Tag( "a", new Attribute( "href", href ) );
 		tag.add( content );
 		
 		return tag;
@@ -51,7 +51,7 @@ public class Tag implements Element {
 	 * @see info.zak_raw.service_aggregation.util.markup.Element#put(info.zak_raw.service_aggregation.util.markup.TagBuilder)
 	 */
 	@Override
-	public void put( StringBuilder builder ) {
+	public void serialize( StringBuilder builder ) {
 		
 		builder.append( '<' ).append( this.name );
 		for ( Attribute attribute : this.attributes ) {
@@ -61,7 +61,7 @@ public class Tag implements Element {
 		}
 		builder.append( '>' );
 		
-		for ( Element child : this.children ) child.put( builder );
+		for ( Element child : this.children ) child.serialize( builder );
 		
 		builder.append( "</" ).append( this.name ).append( '>' );
 	}

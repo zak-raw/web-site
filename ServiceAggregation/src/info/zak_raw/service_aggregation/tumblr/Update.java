@@ -93,12 +93,12 @@ public class Update {
 		Tag ul = new Tag( "ul" );
 		for ( Post post : response.getPosts() ) {
 			Tag li = new Tag( "li" );
-			li.add( post.createElements() );
+			li.add( post.createElement() );
 			ul.add( li );
 		}
 		
 		this.builder.setLength( 0 );
-		ul.put( this.builder );
+		ul.serialize( this.builder );
 		
 		return this.builder.toString();
 	}

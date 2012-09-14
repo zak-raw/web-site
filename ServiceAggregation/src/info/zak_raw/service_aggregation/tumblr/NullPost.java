@@ -4,9 +4,7 @@
 package info.zak_raw.service_aggregation.tumblr;
 
 import info.zak_raw.service_aggregation.util.markup.Element;
-
-import java.util.Collection;
-import java.util.Collections;
+import info.zak_raw.service_aggregation.util.markup.Text;
 
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
@@ -24,9 +22,9 @@ class NullPost extends Post {
 
 	//------------- Methods ------------------------------------
 	@Override
-	public Collection<Element> createElements() {
+	public Element createElement() {
 		
-		return Collections.emptyList();
+		return new Text( "" );
 	}
 
 }

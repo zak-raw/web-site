@@ -6,7 +6,6 @@ package info.zak_raw.service_aggregation.tumblr;
 import info.zak_raw.service_aggregation.util.markup.Element;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.google.appengine.labs.repackaged.org.json.JSONArray;
@@ -37,7 +36,7 @@ abstract class Post extends JSONObjectWrapper {
 	}
 	
 	//------------- Methods ------------------------------------
-	public abstract Collection<Element> createElements() throws JSONException;
+	public abstract Element createElement() throws JSONException;
 	
 	/**
 	 * @return The short name used to uniquely identify a blog

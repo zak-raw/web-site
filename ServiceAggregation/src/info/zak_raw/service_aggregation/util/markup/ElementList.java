@@ -1,26 +1,36 @@
-package info.zak_raw.service_aggregation.util.markup;
-
 /**
  * 
+ */
+package info.zak_raw.service_aggregation.util.markup;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
  * @author Junta Yoshizaki
  *
  */
-public class Text implements Element {
+public class ElementList implements Element {
 
 	//------------- Fields -------------------------------------
-	private final CharSequence text;
+	private List<Element> elements;
 	
 	//------------- Constructors -------------------------------
-	public Text( CharSequence text ) {
+	public ElementList() {
 		
-		this.text = text;
+		this.elements = new ArrayList<Element>();
 	}
 	
 	//------------- Methods ------------------------------------
+	public void add( Element element ) {
+		
+		this.elements.add( element );
+	}
+	
 	@Override
 	public void serialize( StringBuilder builder ) {
 		
-		builder.append( this.text );
+		for ( Element element : this.elements ) element.serialize( builder );
 	}
 
 }

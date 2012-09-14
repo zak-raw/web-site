@@ -4,11 +4,11 @@
 package info.zak_raw.service_aggregation.tumblr;
 
 import info.zak_raw.service_aggregation.util.markup.Element;
+import info.zak_raw.service_aggregation.util.markup.ElementList;
 import info.zak_raw.service_aggregation.util.markup.Tag;
 import info.zak_raw.service_aggregation.util.markup.Text;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,16 +33,17 @@ class PhotoPost extends Post {
 
 	//------------- Methods ------------------------------------
 	@Override
-	public Collection<Element> createElements() throws JSONException {
+	public Element createElement() throws JSONException {
 		
-		Collection<Element> elements = new ArrayList<Element>( this.getPhotos().size() * 3 );
+		ElementList elementList = new ElementList();
 		for ( Photo photo : this.getPhotos() ) {
-			elements.add( this.createDate() );
-			elements.add( this.createImage( photo ) );
-			elements.add( this.createCaption() );
+			elementList.add( this.createDate() );
+			elementList.add( this.createImage( photo ) );
+			elementList.add( this.createCaption() );
 		}
 		
-		return elements;
+		
+		return elementList;
 	}
 	
 	private Element createDate() throws JSONException {
